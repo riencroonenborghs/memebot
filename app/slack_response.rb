@@ -6,7 +6,7 @@ class SlackResponse
   def render
     {
       response_type: "in_channel",
-      text: text
+      text: @text
     }
   end
 end
