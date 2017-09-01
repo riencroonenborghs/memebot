@@ -2,14 +2,8 @@ module Slack
   class Request
     attr_accessor :meme_name, :caption1, :caption2
 
-    HELP          = "help"
-    LIST          = "list"
-    HELP_MESSAGE  = [].tap do |help|
-      help << "`/meme help` this help"
-      help << "`/meme list` a list of available memes"
-      help << "`/meme meme name: caption line 1 [| caption line 2]` generate a meme"
-      help.join("\n")
-    end
+    HELP = "help"
+    LIST = "list"
 
     def initialize text
       @meme_name, captions = text.split(/\: /) rescue nil
@@ -32,12 +26,16 @@ module Slack
             ret << meme.template_url
             ret << meme.name
           end
-          ret << "Full list: http://ecoportal-memebot.herokuapps.com/list"
+          ret << "Full list: http://ecoportal-memebot.herokuapp.com/list"
         end.join("\n")
 
         return Slack::Response::ToYouOnly.text list
       else
-        return Slack::Response::ToYouOnly.text HELP_MESSAGE
+        help = ["`/meme help` this help"]
+        help << "`/meme list` a list of available memes"
+        help << "`/meme meme name: caption line 1 [| caption line 2]` generate a meme"
+        help.join("\n")
+        return Slack::Response::ToYouOnly.text help
       end
     end
 
