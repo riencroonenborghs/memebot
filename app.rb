@@ -9,9 +9,9 @@ MEME_DATABASE = ImgFlip::MemeDatabase.new
 post "/" do
   command = Command.new params["text"]
   if command.help?
-    res = ["", "`/meme help` for this help"]
-    res << "`/meme list` for a list of available memes"
-    res << "`/meme meme name: \"caption\" [\"caption\"]` for meme"
+    res = ["`/meme help` this help"]
+    res << "`/meme list` a list of available memes"
+    res << "`/meme meme name: \"caption\" [\"caption\"]` generate a meme"
     res.join("\n")
   elsif command.list?
     MEME_DATABASE.memes.map do |meme|

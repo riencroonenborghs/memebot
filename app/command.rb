@@ -1,14 +1,16 @@
 class Command
+  attr_accessor :meme_name, :caption1, :caption2
+
   def initialize(text)
-    @meme, captions = text.split(/\:/)
+    @meme_name, captions = text.split(/\:/)
     _, @caption1, _, @caption2 = captions&.split(/\"/)
   end
 
   def help?
-    @meme == "help"
+    @meme_name == "help"
   end
 
   def list?
-    @meme == "list"
+    @meme_name == "list"
   end
 end

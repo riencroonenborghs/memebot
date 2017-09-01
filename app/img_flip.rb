@@ -9,11 +9,11 @@ class ImgFlip
 
   def initialize(command)
     @command  = command
-    @meme     = MEME_DATABASE.memes.select{|x| x.name.downcase.match(/#{command.meme.downcase}/)}.first
+    @meme     = MEME_DATABASE.memes.select{|x| x.name.downcase.match(/#{command.meme_name.downcase}/)}.first
   end
 
   def generate!
-    return "unknown meme #{@command.meme}" unless @meme
+    return "unknown meme #{@command.meme_name}" unless @meme
 
     params = {
       username:     ENV["IMGFLIP_USERNAME"],
