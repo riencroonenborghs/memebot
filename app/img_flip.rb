@@ -50,7 +50,7 @@ class ImgFlip
     end
 
     def memes
-      load! if (@touched + 1.day) < Time.now
+      load! if (@touched + 24*60*60) < Time.now
       @top_100_memes
     end
   end # class MemeDatabase
