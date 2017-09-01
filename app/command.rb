@@ -19,4 +19,5 @@ class Command
 
   def meme?
     @meme_name != HELP && @meme_name != LIST
+  end
 end
