@@ -24,10 +24,11 @@ class ImgFlip
     params = params.merge!(text1: @command.caption2) if @command.caption2
 
     response  = self.class.post!("/caption_image", params)
-
-    return response.body
-
-    response.body["data"]["url"]
+    if response.body["success"]
+      response.body["data"]["url"]
+    else
+      response.body["error_message"]
+    end
   end
 
   class MemeDatabase
