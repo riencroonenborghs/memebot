@@ -1,4 +1,5 @@
 require "sinatra"
+require "sinatra/json"
 require_relative "app/slack_authorizer"
 require_relative "app/command"
 require_relative "app/img_flip"
@@ -18,7 +19,7 @@ post "/" do
       [meme.template_url, meme.name]
     end.flatten.join("\n")
   else
-    ImgFlip.new(command).generate!
+    json ImgFlip.new(command).generate!
   end
 end
 
