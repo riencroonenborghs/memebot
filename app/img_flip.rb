@@ -24,6 +24,9 @@ class ImgFlip
     params = params.merge!(text1: @command.caption2) if @command.caption2
 
     response  = self.class.post!("/caption_image", params)
+
+    return response.body
+
     response.body["data"]["url"]
   end
 
