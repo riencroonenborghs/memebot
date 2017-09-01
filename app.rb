@@ -12,8 +12,10 @@ post "/" do
   if command.help?
     res = ["`/meme help` this help"]
     res << "`/meme list` a list of available memes"
-    res << "`/meme meme name: caption line 1 [| caption line 2]` generate a meme"
-    res.join("\n")
+    res << "`/meme meme name: caption line 1 [| caption line 2]` generate a meme"    
+    json {
+      text: res.join("\n")
+    }
   elsif command.list?
     MEME_DATABASE.memes.map do |meme|
       [meme.template_url, meme.name]
