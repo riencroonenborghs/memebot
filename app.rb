@@ -19,7 +19,7 @@ post "/" do
       [meme.template_url, meme.name]
     end.flatten.join("\n")
   else
-    json image_url: ImgFlip.new(command).generate!
+    json image_url: ImgFlip.new(command).generate!, content_type: "application/json"
   end
 end
 
