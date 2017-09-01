@@ -8,7 +8,10 @@ use SlackAuthorizer
 post "/" do
   command = Command.new params["text"]
   if command.help?
-    "`/meme help` for this help, `/meme list` for a list of available memes or `/meme meme name: \"caption\" [\"caption\"]` for meme"
+    res = ["`/meme help` for this help"]
+    res << "`/meme list` for a list of available memes"
+    res << "`/meme meme name: \"caption\" [\"caption\"]` for meme"
+    res.join("\n")
   elsif command.list?
     db = ImgFlip::MemeDatabase.new
     db.top_100_memes.map do |meme|
