@@ -1,5 +1,9 @@
 require "sinatra"
 
-post "/slack/command" do
+post "/" do
   "OK"
+end
+
+post "/list" do
+  "OK list"
 end
