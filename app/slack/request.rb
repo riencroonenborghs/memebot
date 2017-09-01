@@ -35,7 +35,7 @@ module Slack
       help = ["`/meme help` this help"]
       help << "`/meme list` a list of available memes"
       help << "`/meme meme name: caption line 1 [| caption line 2]` generate a meme"
-      help.join("\n")
+      help = help.join("\n")
 
       return Slack::Response::ToYouOnly.text help
     end
