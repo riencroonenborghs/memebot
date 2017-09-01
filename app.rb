@@ -13,15 +13,13 @@ post "/" do
     res = ["`/meme help` this help"]
     res << "`/meme list` a list of available memes"
     res << "`/meme meme name: caption line 1 [| caption line 2]` generate a meme"    
-    json {
-      text: res.join("\n")
-    }
+    json text: res.join("\n")
   elsif command.list?
     MEME_DATABASE.memes.map do |meme|
       [meme.template_url, meme.name]
     end.flatten.join("\n")
   else
-    json ImgFlip.new(command).generate!
+    json image_url: ImgFlip.new(command).generate!
   end
 end
 
