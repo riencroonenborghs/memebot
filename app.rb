@@ -3,11 +3,14 @@ require "sinatra/json"
 require_relative "app/slack_authorizer"
 require_relative "app/command"
 require_relative "app/img_flip"
+require_relative "app/slack_response"
 
 use SlackAuthorizer
 MEME_DATABASE = ImgFlip::MemeDatabase.new
 
 post "/" do
+  return "https://i.imgur.com/j4L9sT4.png"
+
   command = Command.new params["text"]
   if command.help?
     res = ["`/meme help` this help"]
@@ -19,12 +22,13 @@ post "/" do
       [meme.template_url, meme.name]
     end.flatten.join("\n")
   else
-    json image_url: ImgFlip.new(command).generate!, content_type: "application/json"
+    json image_url: ImgFlip.new(command).generate!
   end
 end
 
 get "/list" do
-  MEME_DATABASE.memes.map do |meme|
+  list = MEME_DATABASE.memes.map do |meme|
     [meme.template_url, meme.name]
   end.flatten.join("\n")
+  json SlackResponse.new(list)
 end
