@@ -3,10 +3,7 @@ class SlackResponse
     @text = text
   end
 
-  def render
-    {
-      response_type: "in_channel",
-      text: @text
-    }
+  def render(json)
+    json response_type: "in_channel", text: @text
   end
 end
