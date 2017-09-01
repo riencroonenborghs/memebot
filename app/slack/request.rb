@@ -25,9 +25,15 @@ module Slack
           return Slack::Response::ToYouOnly.text img_flip.error_message
         end
       elsif list?
-        list = IMGFLIP_MEME_DATABASE.memes.map do |meme|
-          [meme.template_url, meme.name]
-        end.flatten.join("\n")
+        top_10  = IMGFLIP_MEME_DATABASE.memes.slice(0, 10)
+        list    = [].tap do |ret|
+          ret << "*Top 10 memes:*"
+          top_10.each do |meme|
+            ret << meme.template_url
+            ret << meme.name
+          end
+          ret << "Full list: http://ecoportal-memebot.herokuapps.com/list"
+        end.join("\n")
 
         return Slack::Response::ToYouOnly.text list
       else
