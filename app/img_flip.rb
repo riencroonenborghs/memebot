@@ -1,6 +1,9 @@
 require "unirest"
 
 class ImgFlip
+  attr_accessor :ok
+  attr_accessor :image_url, :error_message
+
   IMGFLIP_URL = "https://api.imgflip.com"
 
   def self.post!(path, params = {})
@@ -25,9 +28,11 @@ class ImgFlip
 
     response  = self.class.post!("/caption_image", params)
     if response.body["success"]
-      response.body["data"]["url"]
+      @image_url  = response.body["data"]["url"]
+      @ok         = true
     else
-      response.body["error_message"]
+      @error_message  = response.body["error_message"]
+      @ok             = false
     end
   end
 

@@ -9,28 +9,33 @@ use SlackAuthorizer
 MEME_DATABASE = ImgFlip::MemeDatabase.new
 
 post "/" do
-  json response_type: "in_channel", attachments: {image_url: "https://i.imgur.com/j4L9sT4.png"}
-  return
-  # return SlackResponse.new("https://i.imgur.com/j4L9sT4.png").render(json)
-
   command = Command.new params["text"]
+
   if command.list?
-    MEME_DATABASE.memes.map do |meme|
+    list = MEME_DATABASE.memes.map do |meme|
       [meme.template_url, meme.name]
     end.flatten.join("\n")
+    json SlackResponse.text list
   elsif !command.help?
-    json image_url: ImgFlip.new(command).generate!
+    img_flip = ImgFlip.new(command)
+    img_flip.generate!
+
+    if img_flip.ok
+      json SlackResponse.image_url img_flip.image_url
+    else
+      json SlackResponse.text(img_flip.error_message)
+    end
   else
-    res = ["`/meme help` this help"]
-    res << "`/meme list` a list of available memes"
-    res << "`/meme meme name: caption line 1 [| caption line 2]` generate a meme"    
-    json text: res.join("\n")
+    help = ["`/meme help` this help"]
+    help << "`/meme list` a list of available memes"
+    help << "`/meme meme name: caption line 1 [| caption line 2]` generate a meme"    
+    json SlackResponse.text help
   end
 end
 
-get "/list" do
-  list = MEME_DATABASE.memes.map do |meme|
-    [meme.template_url, meme.name]
-  end.flatten.join("\n")
-  json SlackResponse.new(list)
-end
+# get "/list" do
+#   list = MEME_DATABASE.memes.map do |meme|
+#     [meme.template_url, meme.name]
+#   end.flatten.join("\n")
+#   json SlackResponse.new(list)
+# end
