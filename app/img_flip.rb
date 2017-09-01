@@ -25,7 +25,7 @@ class ImgFlip
 
     response  = self.class.post!("/caption_image", params)
     if response.body["success"]
-      response.body["data"]["url"]
+      {image_url: response.body["data"]["url"]} 
     else
       response.body["error_message"]
     end
