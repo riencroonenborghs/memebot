@@ -4,6 +4,6 @@ post "/" do
   "OK"
 end
 
-post "/list" do
+get "/list" do
   "OK list"
 end
