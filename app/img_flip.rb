@@ -4,10 +4,27 @@ class ImgFlip
   IMGFLIP_URL = "https://api.imgflip.com"
 
   def self.post!(path, params = {})
-    ::Unirest.post(
-      IMGFLIP_URL + path,
-      parameters: params
-    )
+    ::Unirest.post(IMGFLIP_URL + path, parameters: params)
+  end
+
+  def initialize(command)
+    @command  = command
+    @meme     = MEME_DATABASE.memes.select{|x| x.name.downcase.match(/#{command.meme.downcase}/)}.first
+  end
+
+  def generate!
+    return "unknown meme #{@command.meme}" unless @meme
+
+    params = {
+      username:     ENV["IMGFLIP_USERNAME"],
+      password:     ENV["IMGFLIP_PASSWORD"],
+      template_id:  @meme.id
+    }
+    params = params.merge!(text0: @command.caption1) if @command.caption1.present?
+    params = params.merge!(text1: @command.caption2) if @command.caption2.present?
+
+    response  = self.class.post!("/caption_image", params)
+    response.body["data"]["url"]
   end
 
   class MemeDatabase

@@ -4,6 +4,7 @@ require_relative "app/command"
 require_relative "app/img_flip"
 
 use SlackAuthorizer
+MEME_DATABASE = ImgFlip::MemeDatabase.new
 
 post "/" do
   command = Command.new params["text"]
@@ -13,9 +14,10 @@ post "/" do
     res << "`/meme meme name: \"caption\" [\"caption\"]` for meme"
     res.join("\n")
   elsif command.list?
-    db = ImgFlip::MemeDatabase.new
-    db.top_100_memes.map do |meme|
+    MEME_DATABASE.memes.map do |meme|
       [meme.template_url, meme.name]
     end.flatten.join("\n")
+  else
+    ImgFlip.new(command).generate!
   end
 end
