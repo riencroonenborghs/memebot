@@ -9,20 +9,20 @@ use SlackAuthorizer
 MEME_DATABASE = ImgFlip::MemeDatabase.new
 
 post "/" do
-  return "https://i.imgur.com/j4L9sT4.png"
+  return SlackResponse.new("https://i.imgur.com/j4L9sT4.png").render
 
   command = Command.new params["text"]
-  if command.help?
+  if command.list?
+    MEME_DATABASE.memes.map do |meme|
+      [meme.template_url, meme.name]
+    end.flatten.join("\n")
+  elsif !command.help?
+    json image_url: ImgFlip.new(command).generate!
+  else
     res = ["`/meme help` this help"]
     res << "`/meme list` a list of available memes"
     res << "`/meme meme name: caption line 1 [| caption line 2]` generate a meme"    
     json text: res.join("\n")
-  elsif command.list?
-    MEME_DATABASE.memes.map do |meme|
-      [meme.template_url, meme.name]
-    end.flatten.join("\n")
-  else
-    json image_url: ImgFlip.new(command).generate!
   end
 end
 
