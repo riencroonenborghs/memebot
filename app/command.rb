@@ -2,8 +2,9 @@ class Command
   attr_accessor :meme_name, :caption1, :caption2
 
   def initialize(text)
-    @meme_name, captions = text.split(/\:/)
-    _, @caption1, _, @caption2 = captions&.split(/\"/)
+    @meme_name, captions = text.split(/\: /)
+    @caption1, @caption2 = captions&.split(/\s?\|\s?/)
+    Acaption1
   end
 
   def help?
