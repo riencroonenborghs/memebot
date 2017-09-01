@@ -9,7 +9,9 @@ use SlackAuthorizer
 MEME_DATABASE = ImgFlip::MemeDatabase.new
 
 post "/" do
-  return SlackResponse.new("https://i.imgur.com/j4L9sT4.png").render(json)
+  json response_type: "in_channel", text: "https://i.imgur.com/j4L9sT4.png"
+  return
+  # return SlackResponse.new("https://i.imgur.com/j4L9sT4.png").render(json)
 
   command = Command.new params["text"]
   if command.list?
