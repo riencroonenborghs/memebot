@@ -8,6 +8,7 @@ MEME_DATABASE = ImgFlip::MemeDatabase.new
 
 post "/" do
   command = Command.new params["text"]
+  return params["text"]
   if command.help?
     res = ["`/meme help` this help"]
     res << "`/meme list` a list of available memes"
