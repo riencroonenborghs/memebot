@@ -16,7 +16,7 @@ post "/" do
       [meme.template_url, meme.name]
     end.flatten.join("\n")
     json SlackResponse.text list
-  elsif !command.help?
+  elsif command.meme?
     img_flip = ImgFlip.new(command)
     img_flip.generate!
 
@@ -29,7 +29,7 @@ post "/" do
     help = ["`/meme help` this help"]
     help << "`/meme list` a list of available memes"
     help << "`/meme meme name: caption line 1 [| caption line 2]` generate a meme"    
-    json SlackResponse.text help
+    json SlackResponse.text help.join("\n")
   end
 end
 
