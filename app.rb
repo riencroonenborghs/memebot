@@ -15,21 +15,21 @@ post "/" do
     list = MEME_DATABASE.memes.map do |meme|
       [meme.template_url, meme.name]
     end.flatten.join("\n")
-    json SlackResponse.text list
+    json SlackResponse::ToYouOnly.text list
   elsif command.meme?
     img_flip = ImgFlip.new(command)
     img_flip.generate!
 
     if img_flip.ok
-      json SlackResponse.image_url img_flip.image_url
+      json SlackResponse::InChannel.image_url img_flip.image_url
     else
-      json SlackResponse.text(img_flip.error_message)
+      json SlackResponse::InChannel.text(img_flip.error_message)
     end
   else
     help = ["`/meme help` this help"]
     help << "`/meme list` a list of available memes"
     help << "`/meme meme name: caption line 1 [| caption line 2]` generate a meme"    
-    json SlackResponse.text help.join("\n")
+    json SlackResponse::ToYouOnly.text help.join("\n")
   end
 end
 
