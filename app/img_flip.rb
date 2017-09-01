@@ -20,8 +20,8 @@ class ImgFlip
       password:     ENV["IMGFLIP_PASSWORD"],
       template_id:  @meme.id
     }
-    params = params.merge!(text0: @command.caption1) if @command.caption1.present?
-    params = params.merge!(text1: @command.caption2) if @command.caption2.present?
+    params = params.merge!(text0: @command.caption1) if @command.caption1
+    params = params.merge!(text1: @command.caption2) if @command.caption2
 
     response  = self.class.post!("/caption_image", params)
     response.body["data"]["url"]
