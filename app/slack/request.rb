@@ -21,16 +21,35 @@ module Slack
         end
       elsif list?
         top_10  = IMGFLIP_MEME_DATABASE.memes.slice(0, 10)
-        list    = [].tap do |ret|
-          ret << "*Top 10 memes:*"
-          top_10.each do |meme|
-            ret << meme.template_url
-            ret << meme.name
-          end
-          ret << "Full list: #{@base_url}/list"
-        end.join("\n")
 
-        return Slack::Response::ToYouOnly.text list
+        Slack::Response::ToYouOnly.text("Full list: #{@base_url}/list").update (
+          Slack::Response::ToYouOnly.attachments do
+          top_10.map do |meme|
+            hash = {
+              fallback:   meme.name,
+              color:      "#36a64f",
+              title:      meme.name,
+              text:       "/tv #{meme.name}: caption line 1 [| caption line 2]"
+              thumb_url:  meme.template_url
+            }
+            hash.update(thumb_url: "#{IMAGE_PATH}/#{result["poster_path"]}") if result["poster_path"]
+            hash
+          end.update(
+            Slack::Response::ToYouOnly.text "Full list: #{@base_url}/list"
+          )
+        )        
+        end
+
+        # list    = [].tap do |ret|
+        #   ret << "*Top 10 memes:*"
+        #   top_10.each do |meme|
+        #     ret << meme.template_url
+        #     ret << meme.name
+        #   end
+        #   ret << "Full list: #{@base_url}/list"
+        # end.join("\n")
+
+        # return Slack::Response::ToYouOnly.text list
       end
 
       help = ["`/meme help` this help"]
