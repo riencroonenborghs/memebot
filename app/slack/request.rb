@@ -27,7 +27,7 @@ module Slack
               fallback:   meme.name,
               color:      "#36a64f",
               title:      meme.name,
-              text:       "/tv #{meme.name}: caption line 1 [| caption line 2]",
+              text:       "/meme #{meme.name}: caption line 1 [| caption line 2]",
               thumb_url:  meme.template_url
             }
           end
