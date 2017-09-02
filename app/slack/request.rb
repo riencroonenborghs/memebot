@@ -22,7 +22,7 @@ module Slack
       elsif list?
         top_10  = IMGFLIP_MEME_DATABASE.memes.slice(0, 10)
 
-        Slack::Response::ToYouOnly.attachments do
+        return Slack::Response::ToYouOnly.attachments do
           top_10.map do |meme|
             {
               fallback:   meme.name,
