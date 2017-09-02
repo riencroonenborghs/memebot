@@ -20,8 +20,7 @@ module Slack
           return Slack::Response::ToYouOnly.text img_flip.error_message
         end
       elsif list?
-        top_10  = IMGFLIP_MEME_DATABASE.memes.slice(0, 10)
-
+        top_10 = IMGFLIP_MEME_DATABASE.memes.slice(0, 10)
         return Slack::Response::ToYouOnly.attachments do
           top_10.map do |meme|
             {
@@ -32,18 +31,7 @@ module Slack
               thumb_url:  meme.template_url
             }
           end
-        end
-
-        # list    = [].tap do |ret|
-        #   ret << "*Top 10 memes:*"
-        #   top_10.each do |meme|
-        #     ret << meme.template_url
-        #     ret << meme.name
-        #   end
-        #   ret << "Full list: #{@base_url}/list"
-        # end.join("\n")
-
-        # return Slack::Response::ToYouOnly.text list
+        end.update(Slack::Response::ToYouOnly.text("Full list: #{@base_url}/list"))
       end
 
       help = ["`/meme help` this help"]
