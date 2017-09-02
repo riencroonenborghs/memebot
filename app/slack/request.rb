@@ -5,7 +5,8 @@ module Slack
     HELP = "help"
     LIST = "list"
 
-    def initialize text
+    def initialize text, base_url
+      @base_url = base_url
       @meme_name, captions = text.split(/\: /) rescue nil
       @caption1, @caption2 = captions&.split(/\s?\|\s?/)
     end
@@ -26,7 +27,7 @@ module Slack
             ret << meme.template_url
             ret << meme.name
           end
-          ret << "Full list: http://ecoportal-memebot.herokuapp.com/list"
+          ret << "Full list: #{@base_url}/list"
         end.join("\n")
 
         return Slack::Response::ToYouOnly.text list
