@@ -29,7 +29,7 @@ module Slack
               fallback:   meme.name,
               color:      "#36a64f",
               title:      meme.name,
-              text:       "/tv #{meme.name}: caption line 1 [| caption line 2]"
+              text:       "/tv #{meme.name}: caption line 1 [| caption line 2]",
               thumb_url:  meme.template_url
             }
             hash.update(thumb_url: "#{IMAGE_PATH}/#{result["poster_path"]}") if result["poster_path"]
