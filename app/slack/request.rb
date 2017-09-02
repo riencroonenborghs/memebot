@@ -22,8 +22,7 @@ module Slack
       elsif list?
         top_10  = IMGFLIP_MEME_DATABASE.memes.slice(0, 10)
 
-        Slack::Response::ToYouOnly.text("Full list: #{@base_url}/list").update(
-          Slack::Response::ToYouOnly.attachments do
+        Slack::Response::ToYouOnly.attachments do
           top_10.map do |meme|
             hash = {
               fallback:   meme.name,
@@ -34,10 +33,8 @@ module Slack
             }
             hash.update(thumb_url: "#{IMAGE_PATH}/#{result["poster_path"]}") if result["poster_path"]
             hash
-          end.update(
-            Slack::Response::ToYouOnly.text "Full list: #{@base_url}/list"
-          )
-        )
+          end
+        end
 
         # list    = [].tap do |ret|
         #   ret << "*Top 10 memes:*"
