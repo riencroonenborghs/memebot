@@ -23,7 +23,10 @@ module Slack
       if actions?
         return process_actions
       elsif meme?
-        return process_meme        
+        a = process_meme
+        puts "--->>> #{a}"
+        return a
+        # return process_meme        
       elsif list?
         return process_list
       end
@@ -45,7 +48,7 @@ module Slack
           end
         end.flatten
         
-        Slack::Response::ToYouOnly.replace_attachments do
+        Slack::Response::ToYouOnly.attachments do
           attachments
         end
       rescue => e
@@ -101,8 +104,8 @@ module Slack
     def process_meme
       img_flip = ImgFlip::Generator.new self
       if img_flip.generate
-        puts "------ OK: #{img_flip.image_url}"
-        return Slack::Response::InChannel.image_url img_flip.image_url
+        # return Slack::Response::InChannel.image_url img_flip.image_url
+        return Slack::Response::ToYouOnly.image_url img_flip.image_url
       else
         return Slack::Response::ToYouOnly.text img_flip.error_message
       end

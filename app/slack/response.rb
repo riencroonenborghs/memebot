@@ -6,7 +6,7 @@ module Slack
         IN_CHANNEL.update(text: text)
       end
       def self.image_url image_url
-        IN_CHANNEL.update(attachments: [{replace_original: false, image_url: image_url}])
+        IN_CHANNEL.update(attachments: [image_url: image_url])
       end
     end
     
@@ -14,17 +14,14 @@ module Slack
       def self.text text
         {text: text}
       end
+      def self.image_url image_url
+        {attachments: [image_url: image_url]}
+      end
       def self.attachments& block
         ret = {
           attachments: yield 
         }
       end
-      def self.replace_attachments& block
-        ret = {
-          replace_original: true,
-          attachments: yield
-        }
-      end        
       def self.error message
         {attachments: [
           {text: message, color: "#ff0000", pretext: "An error occurred"}
