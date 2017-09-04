@@ -102,8 +102,8 @@ module Slack
       img_flip = ImgFlip::Generator.new self
       if img_flip.generate
         puts "------ OK: #{img_flip.image_url}"
-        return Slack::Response::ToYouOnly.text img_flip.image_url
-        # return Slack::Response::InChannel.image_url img_flip.image_url
+        # return Slack::Response::ToYouOnly.text img_flip.image_url
+        return Slack::Response::InChannel.image_url img_flip.image_url
       else
         return Slack::Response::ToYouOnly.text img_flip.error_message
       end
