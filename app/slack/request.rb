@@ -80,8 +80,9 @@ module Slack
           }
         end
         buttons = {
-          fallback: "Showing #{from+1} to #{to} of #{total}",
-          text: "Showing #{from+1} to #{to} of #{total}", 
+          fallback:     "Showing #{from+1} to #{to} of #{total}",
+          text:         "Showing #{from+1} to #{to} of #{total}", 
+          callback_id:  Time.now.usec,
           actions: []
         }
         buttons[:actions] << {name: "previous_page", text: "Previous Page", type: "button", value: page - 1} if from > 0
