@@ -71,9 +71,9 @@ module Slack
     end
     def process_list_attachments(page = 1)
       from  = (page - 1) * MEMES_PER_PAGE
-      to    = from + MEMES_PER_PAGE
+      to    = from MEMES_PER_PAGE
       total = IMGFLIP_MEME_DATABASE.memes.size
-      list  = IMGFLIP_MEME_DATABASE.memes.slice from, to
+      list  = IMGFLIP_MEME_DATABASE.memes.slice from, MEMES_PER_PAGE
       attachments = list.map do |meme|
         {
           fallback:   meme.name,
