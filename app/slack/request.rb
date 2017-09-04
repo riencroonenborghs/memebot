@@ -66,7 +66,7 @@ module Slack
     end
     def process_list(page = 1)
       from  = (page - 1) * MEMES_PER_PAGE
-      to    = from += MEMES_PER_PAGE
+      to    = from + MEMES_PER_PAGE
       total = IMGFLIP_MEME_DATABASE.memes.size
       list  = IMGFLIP_MEME_DATABASE.memes.slice from, to
       return Slack::Response::ToYouOnly.attachments do
