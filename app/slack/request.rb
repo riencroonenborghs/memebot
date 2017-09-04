@@ -61,20 +61,11 @@ module Slack
             thumb_url:  meme.template_url
           }
         end
-        list << {
-          fallback: "Previous Page",
-          text: "Previous Page",
-          actions: [
-            {name: "previous_page", text: "Previous Page", type: "button", value: "previous_page"}
-          ]
-        } if from > 0
-        list << {
-          fallback: "Next Page",
-          text: "Next Page",
-          actions: [
-            {name: "next_page", text: "Next Page", type: "button", value: "next_page"}
-          ]
-        } if to < IMGFLIP_MEME_DATABASE.memes.size
+        buttons = {actions: []}
+        buttons[:actions] << {name: "previous_page", text: "Previous Page", type: "button", value: "previous_page"} if from > 0
+        buttons[:actions] << {name: "next_page", text: "Next Page", type: "button", value: "next_page"} if to < IMGFLIP_MEME_DATABASE.memes.size
+        list << buttons
+        list
       end
     end
 
