@@ -45,7 +45,7 @@ module Slack
           end
         end.flatten
         
-        Slack::Response::ToYouOnly.attachments do
+        Slack::Response::ToYouOnly.new_attachments do
           attachments
         end
       rescue => e

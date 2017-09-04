@@ -19,6 +19,12 @@ module Slack
           attachments: yield 
         }
       end
+      def self.new_attachments& block
+        ret = {
+          replace_original: false,
+          attachments: yield
+        }
+      end        
       def self.error message
         {attachments: [
           {text: message, color: "#ff0000", pretext: "An error occurred"}
