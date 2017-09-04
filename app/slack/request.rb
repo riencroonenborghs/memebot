@@ -27,7 +27,7 @@ module Slack
           return Slack::Response::ToYouOnly.text img_flip.error_message
         end
       elsif list?
-        process_list
+        return process_list
       end
 
       help = ["`/meme help` this help"]
