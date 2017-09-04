@@ -52,7 +52,7 @@ module Slack
       to    = from += MEMES_PER_PAGE
       list  = IMGFLIP_MEME_DATABASE.memes.slice from, to
       return Slack::Response::ToYouOnly.attachments do
-        list.map do |meme|
+        attachments = list.map do |meme|
           {
             fallback:   meme.name,
             color:      "#36a64f",
@@ -64,8 +64,8 @@ module Slack
         buttons = {actions: []}
         buttons[:actions] << {name: "previous_page", text: "Previous Page", type: "button", value: "previous_page"} if from > 0
         buttons[:actions] << {name: "next_page", text: "Next Page", type: "button", value: "next_page"} if to < IMGFLIP_MEME_DATABASE.memes.size
-        list << buttons
-        list
+        attachments << buttons
+        attachments
       end
     end
 
