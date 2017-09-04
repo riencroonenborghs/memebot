@@ -19,9 +19,9 @@ module Slack
           attachments: yield 
         }
       end
-      def self.new_attachments& block
+      def self.replace_attachments& block
         ret = {
-          replace_original: false,
+          replace_original: true,
           attachments: yield
         }
       end        
