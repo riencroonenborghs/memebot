@@ -6,7 +6,7 @@ module Slack
         IN_CHANNEL.update(text: text)
       end
       def self.image_url image_url
-        IN_CHANNEL.update(attachments: [image_url: image_url])
+        IN_CHANNEL.update(attachments: [{replace_original: false, image_url: image_url}])
       end
     end
     
