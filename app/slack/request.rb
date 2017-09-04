@@ -40,10 +40,10 @@ module Slack
       begin
         attachments = [].tap do |ret|
           @actions.each do |action|
-            ret << process_list(action["value"].to_i)   if action["name"] == "previous_page"
-            ret << process_list(action["value"].to_i) if action["name"] == "next_page"
+            ret << process_list_attachments(action["value"].to_i) if action["name"] == "previous_page"
+            ret << process_list_attachments(action["value"].to_i) if action["name"] == "next_page"
           end
-        end.join("\n")
+        end.flatten
         
         Slack::Response::ToYouOnly.attachments do
           attachments
@@ -65,31 +65,34 @@ module Slack
       @meme_name == LIST
     end
     def process_list(page = 1)
+      return Slack::Response::ToYouOnly.attachments do 
+        process_list_attachments(page)
+      end
+    end
+    def process_list_attachments(page = 1)
       from  = (page - 1) * MEMES_PER_PAGE
       to    = from + MEMES_PER_PAGE
       total = IMGFLIP_MEME_DATABASE.memes.size
       list  = IMGFLIP_MEME_DATABASE.memes.slice from, to
-      return Slack::Response::ToYouOnly.attachments do
-        attachments = list.map do |meme|
-          {
-            fallback:   meme.name,
-            color:      "#36a64f",
-            title:      meme.name,
-            text:       "/meme #{meme.name}: caption line 1 [| caption line 2]",
-            thumb_url:  meme.template_url
-          }
-        end
-        buttons = {
-          fallback:     "Showing #{from+1} to #{to} of #{total}",
-          text:         "Showing #{from+1} to #{to} of #{total}", 
-          callback_id:  Time.now.usec,
-          actions: []
+      attachments = list.map do |meme|
+        {
+          fallback:   meme.name,
+          color:      "#36a64f",
+          title:      meme.name,
+          text:       "/meme #{meme.name}: caption line 1 [| caption line 2]",
+          thumb_url:  meme.template_url
         }
-        buttons[:actions] << {name: "previous_page", text: "Previous Page", type: "button", value: page - 1} if from > 0
-        buttons[:actions] << {name: "next_page", text: "Next Page", type: "button", value: page + 1} if to < IMGFLIP_MEME_DATABASE.memes.size
-        attachments << buttons
-        attachments
       end
+      buttons = {
+        fallback:     "Showing #{from+1} to #{to} of #{total}",
+        text:         "Showing #{from+1} to #{to} of #{total}", 
+        callback_id:  Time.now.usec,
+        actions: []
+      }
+      buttons[:actions] << {name: "previous_page", text: "Previous Page", type: "button", value: page - 1} if from > 0
+      buttons[:actions] << {name: "next_page", text: "Next Page", type: "button", value: page + 1} if to < IMGFLIP_MEME_DATABASE.memes.size
+      attachments << buttons
+      attachments
     end
 
     def meme?
