@@ -27,18 +27,7 @@ module Slack
           return Slack::Response::ToYouOnly.text img_flip.error_message
         end
       elsif list?
-        top_10 = IMGFLIP_MEME_DATABASE.memes.slice(0, 10)
-        return Slack::Response::ToYouOnly.attachments do
-          top_10.map do |meme|
-            {
-              fallback:   meme.name,
-              color:      "#36a64f",
-              title:      meme.name,
-              text:       "/meme #{meme.name}: caption line 1 [| caption line 2]",
-              thumb_url:  meme.template_url
-            }
-          end
-        end.update(Slack::Response::ToYouOnly.text("Full list: #{@base_url}/list"))
+        process_list
       end
 
       help = ["`/meme help` this help"]
