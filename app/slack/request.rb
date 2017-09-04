@@ -62,8 +62,8 @@ module Slack
           }
         end
         buttons = {actions: []}
-        buttons[:actions] << {name: "previous_page", text: "Previous Page", type: "button", value: "previous_page"} if from > 0
-        buttons[:actions] << {name: "next_page", text: "Next Page", type: "button", value: "next_page"} if to < IMGFLIP_MEME_DATABASE.memes.size
+        buttons[:actions] << {name: "previous_page", text: "Previous Page", type: "button", value: "previous_page"} #if from > 0
+        buttons[:actions] << {name: "next_page", text: "Next Page", type: "button", value: "next_page"} #if to < IMGFLIP_MEME_DATABASE.memes.size
         attachments << buttons
         attachments
       end
