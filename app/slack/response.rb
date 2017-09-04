@@ -26,9 +26,8 @@ module Slack
       end
     end
 
-    class Direct
-      def self.text user, text
-      end
+    def self.post url, data
+      ::Unirest.post url, headers: {"Accept" => "application/json"}, parameters: data
     end
   end
 end

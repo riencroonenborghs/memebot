@@ -1,14 +1,20 @@
 module Slack
   class Request
     attr_accessor :meme_name, :caption1, :caption2
+    attr_accessor :response_url
 
     HELP = "help"
     LIST = "list"
 
-    def initialize text, base_url
+    def initialize params, base_url
       @base_url = base_url
-      @meme_name, captions = text.split(/\: /) rescue nil
+      # payload
+      @payload = JSON.parse params[:payload] || "{}"
+      # meme, captions
+      @meme_name, captions = params[:text].split(/\: /) rescue nil
       @caption1, @caption2 = captions&.split(/\s?\|\s?/)
+      # response_url for >3s responses
+      @response_url = params[:response_url] || @payload["response_url"]
     end
 
     def process

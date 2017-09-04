@@ -13,8 +13,9 @@ use Slack::Authorizer
 IMGFLIP_MEME_DATABASE = ImgFlip::Database.new
 
 post "/" do
-  slack_request = Slack::Request.new params["text"], request.base_url
-  json slack_request.process
+  slack_request = Slack::Request.new params, request.base_url
+  response = slack_request.process
+  Slack::Response.post slack_request.response_url, response.to_json
 end
 
 get "/list" do
