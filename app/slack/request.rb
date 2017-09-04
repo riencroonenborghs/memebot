@@ -5,6 +5,7 @@ module Slack
 
     HELP = "help"
     LIST = "list"
+    MEMES_PER_PAGE = 5
 
     def initialize params, base_url
       @base_url = base_url
@@ -56,6 +57,36 @@ module Slack
 
     def list?
       @meme_name == LIST
+    end
+    def process_list(page = 1)
+      from  = (page - 1) * MEMES_PER_PAGE
+      to    = from += MEMES_PER_PAGE
+      list  = IMGFLIP_MEME_DATABASE.memes.slice from, to
+      return Slack::Response::ToYouOnly.attachments do
+        list.map do |meme|
+          {
+            fallback:   meme.name,
+            color:      "#36a64f",
+            title:      meme.name,
+            text:       "/meme #{meme.name}: caption line 1 [| caption line 2]",
+            thumb_url:  meme.template_url
+          }
+        end
+        list << {
+          fallback: "Previous Page",
+          text: "Previous Page",
+          actions: [
+            {name: "previous_page", text: "Previous Page", type: "button", value: "previous_page"}
+          ]
+        } if from > 0
+        list << {
+          fallback: "Next Page",
+          text: "Next Page",
+          actions: [
+            {name: "next_page", text: "Next Page", type: "button", value: "next_page"}
+          ]
+        } if to < IMGFLIP_MEME_DATABASE.memes.size
+      end
     end
 
     def meme?
