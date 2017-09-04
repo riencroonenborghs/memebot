@@ -23,7 +23,7 @@ module Slack
       if actions?
         return process_actions
       elsif meme?
-        return process_memes        
+        return process_meme        
       elsif list?
         return process_list
       end
@@ -98,9 +98,10 @@ module Slack
     def meme?
       !@meme_name.nil? && @meme_name != HELP && @meme_name != LIST
     end
-    def process_memes
+    def process_meme
       img_flip = ImgFlip::Generator.new self
       if img_flip.generate
+        puts "------ OK: #{img_flip.image_url}"
         return Slack::Response::InChannel.image_url img_flip.image_url
       else
         return Slack::Response::ToYouOnly.text img_flip.error_message
