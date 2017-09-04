@@ -9,8 +9,8 @@ module Slack
 
     def initialize params, base_url
       @base_url = base_url
-      # payload
-      @payload = JSON.parse params[:payload] || "{}"
+      # payload and actions
+      @payload  = JSON.parse params[:payload] || "{}"
       @actions  = @payload["actions"] || []
       # meme, captions
       @meme_name, captions = params[:text].split(/\: /) rescue nil
@@ -21,24 +21,14 @@ module Slack
 
     def process
       if actions?
-        process_actions
+        return process_actions
       elsif meme?
-        img_flip = ImgFlip::Generator.new self
-        if img_flip.generate
-          return Slack::Response::InChannel.image_url img_flip.image_url
-        else
-          return Slack::Response::ToYouOnly.text img_flip.error_message
-        end
+        return process_memes        
       elsif list?
         return process_list
       end
 
-      help = ["`/meme help` this help"]
-      help << "`/meme list` a list of available memes"
-      help << "`/meme meme name: caption line 1 [| caption line 2]` generate a meme"
-      help = help.join("\n")
-
-      return Slack::Response::ToYouOnly.text help
+      process_help      
     end
 
   private
@@ -63,12 +53,16 @@ module Slack
       end
     end
 
-    def help?
-      @meme_name == HELP || @meme_name.nil?
+    def process_help
+      help = ["`/meme help` this help"]
+      help << "`/meme list` a list of available memes"
+      help << "`/meme meme name: caption line 1 [| caption line 2]` generate a meme"
+      help = help.join("\n")
+      return Slack::Response::ToYouOnly.text help
     end
 
     def list?
-      @meme_name == LIST || 
+      @meme_name == LIST
     end
     def process_list(page = 1)
       from  = (page - 1) * MEMES_PER_PAGE
@@ -100,5 +94,14 @@ module Slack
     def meme?
       !@meme_name.nil? && @meme_name != HELP && @meme_name != LIST
     end
+    def process_memes
+      img_flip = ImgFlip::Generator.new self
+      if img_flip.generate
+        return Slack::Response::InChannel.image_url img_flip.image_url
+      else
+        return Slack::Response::ToYouOnly.text img_flip.error_message
+      end
+    end
+
   end
 end
